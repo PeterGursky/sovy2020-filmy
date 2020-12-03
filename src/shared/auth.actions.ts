@@ -8,3 +8,8 @@ export class Login {
 export class Logout {
   static readonly type="[NavBar Component] logout";
 }
+
+export class UrlAfterLogin {
+  static readonly type="[Auth Guard] set URL after login";
+  constructor(public url: string) {}
+}

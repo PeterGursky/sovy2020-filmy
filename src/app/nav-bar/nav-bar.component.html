@@ -1,9 +1,28 @@
 <mat-toolbar color="primary">
-  <span>My App</span>
-  <span class="spacer"></span>
+  <span>Films App</span>
   <span>
-    <button mat-flat-button color="primary" aria-label="Logout" (click)="logout()">
-      <mat-icon>logout</mat-icon> Logout
+    <button mat-flat-button color="primary" aria-label="Users" routerLink="/users">
+      <mat-icon>person</mat-icon> Users
     </button>
+  </span>
+  <span>
+    <button mat-flat-button color="primary" aria-label="Groups" routerLink="/groups">
+      <mat-icon>group</mat-icon> Groups
+    </button>
+  </span>
+  <span class="spacer"></span>
+  <span *ngIf="username$ | async; then thenBlock else elseBlock"></span>
+    <ng-template #thenBlock>
+      <strong>{{username$ | async}}</strong>
+      <button mat-flat-button color="primary" aria-label="Logout" (click)="logout()">
+        <mat-icon>logout</mat-icon> Logout
+      </button>
+    </ng-template>
+    <ng-template #elseBlock>
+      <button mat-flat-button color="primary" aria-label="Logout" routerLink="/login">
+        <mat-icon>login</mat-icon> Login
+      </button>
+    </ng-template>
+  <span>
   </span>
 </mat-toolbar>

@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { EMPTY, Observable } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, mapTo } from 'rxjs/operators';
 import { Auth } from 'src/entities/auth';
 
 @Injectable({
@@ -16,6 +16,13 @@ export class UsersService {
     return this.http.post(this.serverUrl + "login", auth, {responseType: 'text'}).pipe(
       catchError(error => this.processHttpError(error))
     );
+  }
+
+  logout(token:string):Observable<void> {
+    return this.http.get(this.serverUrl + "logout/" + token).pipe(
+      mapTo(undefined),
+      catchError(error => this.processHttpError(error))
+    )
   }
 
   processHttpError(error) {

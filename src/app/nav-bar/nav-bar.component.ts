@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { Logout } from 'src/shared/auth.actions';
@@ -17,7 +18,7 @@ export class NavBarComponent implements OnInit {
 //  @Select(state => state.auth.username) username$: Observable<string>;
   @Select(AuthState.userName) username$: Observable<string>;
 
-  constructor(private store: Store) { }
+  constructor(private store: Store, private router: Router) { }
 
   ngOnInit(): void {
 //    this.authState$.subscribe(auth => this.loggedUser = auth.username);
@@ -25,6 +26,8 @@ export class NavBarComponent implements OnInit {
   }
 
   logout() {
-    this.store.dispatch(new Logout());
+    this.store.dispatch(new Logout()).subscribe(() => {
+      this.router.navigateByUrl('login');
+    });
   }
 }

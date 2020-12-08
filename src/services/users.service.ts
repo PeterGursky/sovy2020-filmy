@@ -1,8 +1,9 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { EMPTY, Observable } from 'rxjs';
-import { catchError, map, mapTo } from 'rxjs/operators';
+import { EMPTY, Observable, of } from 'rxjs';
+import { catchError, map, mapTo, tap } from 'rxjs/operators';
 import { Auth } from 'src/entities/auth';
+import { SnackbarService } from './snackbar.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,10 +11,13 @@ import { Auth } from 'src/entities/auth';
 export class UsersService {
   private serverUrl = "http://localhost:8080/";
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private snackbarServise: SnackbarService) { }
 
   login(auth:Auth): Observable<string> {
     return this.http.post(this.serverUrl + "login", auth, {responseType: 'text'}).pipe(
+      tap(token => {
+        this.snackbarServise.successMessage("User " + auth.name + " has logged in");
+      }),
       catchError(error => this.processHttpError(error))
     );
   }
@@ -25,22 +29,32 @@ export class UsersService {
     )
   }
 
+  checkToken(token: string): Observable<boolean> {
+    if (token == null) {
+      return of(false);
+    }
+    return this.http.get(this.serverUrl + "check-token/" + token).pipe(
+      mapTo(true),
+      catchError(_error => of(false))
+    )
+  }
+
   processHttpError(error) {
     if (error instanceof HttpErrorResponse) {
       if (error.status === 0) {
-//        this.messageService.sendMessage("Server je nedostupný");
+        this.snackbarServise.errorMessage("Server is unreachable");
       } else {
         if (error.status >= 400 && error.status < 500) {  
           const message = error.error.errorMessage ?? JSON.parse(error.error).errorMessage;
-//          this.messageService.sendMessage(message);
+          this.snackbarServise.errorMessage(message);
         } else {
-//          this.messageService.sendMessage("chyba servera: " + error.message);
+          this.snackbarServise.errorMessage("Server error: " + error.message);
         }
       }
     } else {
-//      this.messageService.sendMessage("Chyba programátora : " + JSON.stringify(error));
+      this.snackbarServise.errorMessage("Programmer's error : " + JSON.stringify(error));
     }
-    console.error("Chyba zo servera: ", error);
+    console.error("Server error: ", error);
     return EMPTY;
   }
 }

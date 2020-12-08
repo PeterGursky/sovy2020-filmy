@@ -13,13 +13,15 @@ import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { AuthState } from 'src/shared/auth.state';
 import { HttpClientModule } from '@angular/common/http';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
-
+import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    NavBarComponent
+    NavBarComponent,
+    RegisterComponent
   ],
   imports: [
     NgxsModule.forRoot([AuthState], {
@@ -28,6 +30,9 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
         suppressErrors: false,
         injectContainerState: false
       }
+    }),
+    NgxsStoragePluginModule.forRoot({
+      key: ['auth.token', 'auth.username']
     }),
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot(),

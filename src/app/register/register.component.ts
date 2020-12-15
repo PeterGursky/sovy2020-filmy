@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, AsyncValidatorFn, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { User } from 'src/entities/user';
+import { UsersService } from 'src/services/users.service';
 import * as zxcvbn from 'zxcvbn';
 
 @Component({
@@ -11,19 +15,23 @@ import * as zxcvbn from 'zxcvbn';
 export class RegisterComponent implements OnInit {
 
   registerForm = new FormGroup({
-    username: new FormControl('', [Validators.required, 
-                                   Validators.minLength(3)]),
-    email: new FormControl('', [Validators.required, 
-                                Validators.email,
-                                Validators.pattern("[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$")]),
+    username: new FormControl('', 
+                              [Validators.required, Validators.minLength(3)],
+                              this.serverConflictsValidator('name')),
+    email: new FormControl('', 
+                           [Validators.required, 
+                            Validators.email,
+                            Validators.pattern("[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$")],
+                           this.serverConflictsValidator('email')),
     password: new FormControl('', [Validators.required, 
                                    this.passwordValidator()]),
     password2: new FormControl('', Validators.required)
-  });
+  }, this.passwordsMatchValidator);
+
   hide = true;
   passwordMessage = "";
 
-  constructor() { }
+  constructor(private usersService: UsersService, private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -49,7 +57,9 @@ export class RegisterComponent implements OnInit {
                           undefined, // active
                           [],        // groups
                           this.password.value);
-    console.log("User: " + JSON.stringify(user));
+    this.usersService.register(user).subscribe(u => {
+      this.router.navigateByUrl("/login");
+    })
   }
 
   getErrors(model: AbstractControl) {
@@ -64,6 +74,36 @@ export class RegisterComponent implements OnInit {
       result.feedback.warning + ' ' + result.feedback.suggestions +
       ", crackable in " + result.crack_times_display.offline_slow_hashing_1e4_per_second;
       return result.score > 2 ? null : { weakPassword: this.passwordMessage };
+    }
+  }
+
+  passwordsMatchValidator(model: FormGroup): ValidationErrors {
+    const password = model.get('password');
+    const password2 = model.get('password2');
+    if (password.value === password2.value) {
+      password2.setErrors(null);
+      return null;
+    } else {
+      const error = { differentPasswords: 'Passwords do not match'};
+      password2.setErrors(error);
+      return error;
+    }
+  }
+
+  serverConflictsValidator(inputName: string): AsyncValidatorFn {
+    return (control: FormControl): Observable<ValidationErrors> => {
+      const name = inputName === 'name' ? control.value: "";
+      const email = inputName === 'email' ? control.value: "";
+      const user = new User(name,email);
+      return this.usersService.checkUserConflicts(user).pipe(
+        map(conflictsArray => {
+          if (conflictsArray.includes(inputName)) {
+            return {conflictOnServer : 'already taken on server - choose another ' + inputName};
+          } else {
+            return null;
+          }
+        })
+      );
     }
   }
 }

@@ -12,13 +12,19 @@
             <mat-error *ngIf="username.errors?.required">Username is required</mat-error>            
             <mat-error *ngIf="username.errors?.minlength">
               Username must have {{username.errors.minlength.requiredLength}} characters
-              but has only {{username.errors.minlength.actualLength}} characters</mat-error>         
+              but has only {{username.errors.minlength.actualLength}} characters</mat-error>
+            <mat-error *ngIf="username.errors?.conflictOnServer">
+              {{username.errors.conflictOnServer}}
+            </mat-error>         
           </mat-form-field>
           <mat-form-field appearance="fill">
             <mat-label>E-mail</mat-label>
             <input matInput required email formControlName="email">
             <mat-error *ngIf="email.errors?.required">E-mail is required</mat-error>             
             <mat-error *ngIf="email.errors?.email || email.errors?.pattern">E-mail is in wrong format</mat-error>            
+            <mat-error *ngIf="email.errors?.conflictOnServer">
+              {{email.errors.conflictOnServer}}
+            </mat-error>         
           </mat-form-field>
           <mat-form-field appearance="fill">
             <mat-label>Password</mat-label>
@@ -45,7 +51,8 @@
         </p>
       </mat-card-content>
       <mat-card-actions>
-          <button type="submit" mat-stroked-button color="primary">Register</button>
+          <button type="submit" mat-stroked-button color="primary"
+           [disabled]="registerForm.invalid">Register</button>
       </mat-card-actions>
       </mat-card>
   </form>

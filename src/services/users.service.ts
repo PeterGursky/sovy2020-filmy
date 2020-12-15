@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { EMPTY, Observable, of } from 'rxjs';
 import { catchError, map, mapTo, tap } from 'rxjs/operators';
 import { Auth } from 'src/entities/auth';
+import { User } from 'src/entities/user';
 import { SnackbarService } from './snackbar.service';
 
 @Injectable({
@@ -36,6 +37,21 @@ export class UsersService {
     return this.http.get(this.serverUrl + "check-token/" + token).pipe(
       mapTo(true),
       catchError(_error => of(false))
+    )
+  }
+
+  checkUserConflicts(user: User): Observable<string[]> {
+    return this.http.post<string[]>(this.serverUrl + "user-conflicts", user).pipe(
+      catchError(error => this.processHttpError(error))
+    );
+  }
+
+  register(user:User): Observable<User> {
+    return this.http.post<User>(this.serverUrl+"/register", user).pipe(
+      tap(user =>{
+        this.snackbarServise.successMessage("User " + user.name + " successfully registered, you can log in now");
+      }),
+      catchError(error => this.processHttpError(error))
     )
   }
 

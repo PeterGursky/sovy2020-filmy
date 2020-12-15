@@ -1,9 +1,11 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Store } from '@ngxs/store';
 import { EMPTY, Observable, of } from 'rxjs';
 import { catchError, map, mapTo, tap } from 'rxjs/operators';
 import { Auth } from 'src/entities/auth';
 import { User } from 'src/entities/user';
+import { AuthState } from 'src/shared/auth.state';
 import { SnackbarService } from './snackbar.service';
 
 @Injectable({
@@ -12,7 +14,8 @@ import { SnackbarService } from './snackbar.service';
 export class UsersService {
   private serverUrl = "http://localhost:8080/";
 
-  constructor(private http: HttpClient, private snackbarServise: SnackbarService) { }
+  constructor(private http: HttpClient, private snackbarServise: SnackbarService,
+              private store: Store) { }
 
   login(auth:Auth): Observable<string> {
     return this.http.post(this.serverUrl + "login", auth, {responseType: 'text'}).pipe(
@@ -53,6 +56,18 @@ export class UsersService {
       }),
       catchError(error => this.processHttpError(error))
     )
+  }
+
+  getExtendedUsers(): Observable<User[]> {
+    const token = this.store.selectSnapshot(state => state.auth.token);
+    return this.http.get<Array<any>>(this.serverUrl + "users/" + token).pipe(
+      map(usersFromServer => this.mapToExtendedUsers(usersFromServer)),
+      catchError(error => this.processHttpError(error))
+    );
+  }
+
+  mapToExtendedUsers(usersFromServer:Array<any>):User[] {
+    return usersFromServer.map(u => User.clone(u));    
   }
 
   processHttpError(error) {

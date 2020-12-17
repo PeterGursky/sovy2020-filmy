@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -9,11 +9,11 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTableModule } from '@angular/material/table';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [],
   imports: [
-    BrowserAnimationsModule,
     MatCardModule,
     MatButtonModule,
     MatFormFieldModule,
@@ -22,10 +22,10 @@ import { MatTableModule } from '@angular/material/table';
     MatToolbarModule,
     MatSnackBarModule,
     MatTabsModule,
-    MatTableModule
+    MatTableModule,
+    MatDialogModule
   ], 
   exports: [
-    BrowserAnimationsModule,
     MatCardModule,
     MatButtonModule,
     MatFormFieldModule,
@@ -34,7 +34,8 @@ import { MatTableModule } from '@angular/material/table';
     MatToolbarModule,
     MatSnackBarModule,
     MatTabsModule,
-    MatTableModule    
+    MatTableModule,
+    MatDialogModule    
   ]
 })
 export class MaterialModule { }

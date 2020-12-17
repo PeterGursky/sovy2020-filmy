@@ -5,16 +5,19 @@ import { UsersRoutingModule } from './users-routing.module';
 import { UsersMenuComponent } from './users-menu/users-menu.component';
 import { UsersListComponent } from './users-list/users-list.component';
 import { UserAddComponent } from './user-add/user-add.component';
-import { MatTabsModule } from '@angular/material/tabs';
-import { MatTableModule } from '@angular/material/table';
-
+import { MaterialModule } from '../material.module';
+import { GroupsToStringPipe } from '../../pipes/groups-to-string.pipe';
 
 @NgModule({
-  declarations: [UsersMenuComponent, UsersListComponent, UserAddComponent],
+  declarations: [
+    UsersMenuComponent, 
+    UsersListComponent, 
+    UserAddComponent,
+    GroupsToStringPipe
+  ],
   imports: [
     CommonModule,
-    MatTableModule,
-    MatTabsModule,
+    MaterialModule,
     UsersRoutingModule
   ]
 })

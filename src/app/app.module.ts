@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { MaterialModule } from 'src/modules/material.module';
 import { AppRoutingModule } from './app-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -15,13 +16,16 @@ import { HttpClientModule } from '@angular/common/http';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { RegisterComponent } from './register/register.component';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     NavBarComponent,
-    RegisterComponent
+    RegisterComponent,
+    ConfirmDialogComponent
   ],
   imports: [
     NgxsModule.forRoot([AuthState], {
@@ -37,6 +41,7 @@ import { RegisterComponent } from './register/register.component';
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot(),
     BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,

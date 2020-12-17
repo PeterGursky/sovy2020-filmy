@@ -58,9 +58,11 @@ export class UsersService {
     )
   }
 
+  get token() {
+    return this.store.selectSnapshot(state => state.auth.token);
+  }
   getExtendedUsers(): Observable<User[]> {
-    const token = this.store.selectSnapshot(state => state.auth.token);
-    return this.http.get<Array<any>>(this.serverUrl + "users/" + token).pipe(
+    return this.http.get<Array<any>>(this.serverUrl + "users/" + this.token).pipe(
       map(usersFromServer => this.mapToExtendedUsers(usersFromServer)),
       catchError(error => this.processHttpError(error))
     );
@@ -68,6 +70,13 @@ export class UsersService {
 
   mapToExtendedUsers(usersFromServer:Array<any>):User[] {
     return usersFromServer.map(u => User.clone(u));    
+  }
+
+  deleteUser(user:User):Observable<boolean> {
+    return this.http.delete(this.serverUrl + "user/" + user.id + "/" + this.token).pipe(
+      mapTo(true),
+      catchError(error => this.processHttpError(error))
+    );
   }
 
   processHttpError(error) {

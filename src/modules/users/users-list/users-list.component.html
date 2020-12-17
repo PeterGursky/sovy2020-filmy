@@ -15,7 +15,26 @@
   <ng-container matColumnDef="groups">
     <th mat-header-cell *matHeaderCellDef>Groups</th>
     <td mat-cell *matCellDef="let user">
-      <span *ngFor="let group of user.groups">{{group.name}},</span>
+      {{user.groups | groupsToString}}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="permissions">
+    <th mat-header-cell *matHeaderCellDef>Permissions</th>
+    <td mat-cell *matCellDef="let user">
+      {{user.groups | groupsToString: 'permissions'}}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let user">
+      <button mat-icon-button color="primary">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button mat-icon-button color="warn" (click)="deleteUser(user)">
+        <mat-icon>delete</mat-icon>
+      </button>
     </td>
   </ng-container>
 

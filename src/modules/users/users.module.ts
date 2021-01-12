@@ -7,6 +7,7 @@ import { UsersListComponent } from './users-list/users-list.component';
 import { MaterialModule } from '../material.module';
 import { GroupsToStringPipe } from '../../pipes/groups-to-string.pipe';
 import { UserEditComponent } from './user-edit/user-edit.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { UserEditComponent } from './user-edit/user-edit.component';
   imports: [
     CommonModule,
     MaterialModule,
+    ReactiveFormsModule,
     UsersRoutingModule
   ]
 })

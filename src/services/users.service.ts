@@ -4,6 +4,7 @@ import { Store } from '@ngxs/store';
 import { EMPTY, Observable, of } from 'rxjs';
 import { catchError, map, mapTo, tap } from 'rxjs/operators';
 import { Auth } from 'src/entities/auth';
+import { Group } from 'src/entities/group';
 import { User } from 'src/entities/user';
 import { AuthState } from 'src/shared/auth.state';
 import { SnackbarService } from './snackbar.service';
@@ -83,6 +84,12 @@ export class UsersService {
   deleteUser(user:User):Observable<boolean> {
     return this.http.delete(this.serverUrl + "user/" + user.id + "/" + this.token).pipe(
       mapTo(true),
+      catchError(error => this.processHttpError(error))
+    );
+  }
+
+  getGroups(): Observable<Group[]> {
+    return this.http.get<Group[]>(this.serverUrl + "groups").pipe(
       catchError(error => this.processHttpError(error))
     );
   }

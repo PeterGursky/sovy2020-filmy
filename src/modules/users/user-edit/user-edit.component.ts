@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AsyncValidatorFn, FormArray, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Group } from 'src/entities/group';
@@ -32,7 +32,7 @@ export class UserEditComponent implements OnInit {
     groups: new FormArray([])
   });
 
-  constructor(private route: ActivatedRoute, private usersService: UsersService) { }
+  constructor(private route: ActivatedRoute, private usersService: UsersService, private router: Router) { }
 
   ngOnInit(): void {
     this.route.data.subscribe(
@@ -78,9 +78,10 @@ export class UserEditComponent implements OnInit {
       this.user.id,
       undefined,
       this.active.value,
-        null/*this.groups.at(i).value*/,
+      this.allGroups.filter((_group, i) => this.groups.at(i).value),
       this.password.value.trim() ? this.password.value.trim(): null
     );
+    this.usersService.saveUser(userToSave).subscribe(_user => this.router.navigateByUrl("/users/list"));
   }
 
   serverConflictsValidator(inputName: string): AsyncValidatorFn {

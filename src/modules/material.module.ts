@@ -12,6 +12,8 @@ import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
   declarations: [],
@@ -27,7 +29,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatTableModule,
     MatDialogModule,
     MatSlideToggleModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatPaginatorModule,
+    MatSortModule
   ], 
   exports: [
     MatCardModule,
@@ -41,7 +45,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatTableModule,
     MatDialogModule,
     MatSlideToggleModule,
-    MatCheckboxModule    
+    MatCheckboxModule,
+    MatPaginatorModule,
+    MatSortModule    
   ]
 })
 export class MaterialModule { }

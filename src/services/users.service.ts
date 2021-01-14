@@ -94,6 +94,13 @@ export class UsersService {
     );
   }
 
+  saveUser(user:User): Observable<User> {
+    return this.http.post<User>(this.serverUrl + "users/" + this.token, user).pipe(
+      map(u => User.clone(u)),
+      catchError(error => this.processHttpError(error))
+    );
+  }
+
   processHttpError(error) {
     if (error instanceof HttpErrorResponse) {
       if (error.status === 0) {

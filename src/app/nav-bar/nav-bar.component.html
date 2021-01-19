@@ -10,6 +10,11 @@
       <mat-icon>group</mat-icon> Groups
     </button>
   </span>
+  <span>
+    <button mat-flat-button color="primary" aria-label="Films" routerLink="/films">
+      <mat-icon>movie</mat-icon> Films
+    </button>
+  </span>
   <span class="spacer"></span>
   <span *ngIf="username$ | async; then thenBlock else elseBlock"></span>
     <ng-template #thenBlock>

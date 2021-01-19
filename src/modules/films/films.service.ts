@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { EMPTY, Observable } from 'rxjs';
@@ -17,7 +17,10 @@ export class FilmsService {
     return this.store.selectSnapshot(state => state.auth.token);
   }
 
-  get tokenHeader() {
+  get tokenHeader(): {
+    headers?: { [header:string]: string};
+    params?: HttpParams
+  } {
     return this.token ? { headers: {'X-Auth-Token': this.token}}: undefined;
   }
 
@@ -28,7 +31,20 @@ export class FilmsService {
   }
 
   getFilms(indexFrom?: number, indexTo?: number, search?: string): Observable<FilmsResponse> {
-    return this.http.get<FilmsResponse>(this.serverUrl, this.tokenHeader).pipe(
+    let httpOptions = this.tokenHeader;
+    if (indexFrom || indexTo || search) {
+      httpOptions = { ... (httpOptions || {}), params: new HttpParams()};
+      if (indexFrom) {
+        httpOptions.params = httpOptions.params.set('indexFrom', indexFrom.toString());
+      }
+      if (indexTo) {
+        httpOptions.params = httpOptions.params.set('indexTo', indexTo.toString());
+      }
+      if (search) {
+        httpOptions.params = httpOptions.params.set('search', search);
+      }
+    }
+    return this.http.get<FilmsResponse>(this.serverUrl, httpOptions).pipe(
       catchError(error => this.processHttpError(error))
     );
   }

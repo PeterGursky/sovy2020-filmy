@@ -22,7 +22,7 @@ export class FilmsComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-    this.filmsService.getFilms().subscribe(filmsResponse => {
+    this.filmsService.getFilms(0, 5, 'sha').subscribe(filmsResponse => {
       console.log(filmsResponse);
       this.dataSource.data = filmsResponse.items;
     });

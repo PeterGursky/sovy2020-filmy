@@ -5,9 +5,10 @@ import { FilmsRoutingModule } from './films-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from '../material.module';
 import { FilmsService } from './films.service';
+import { FilmsComponent } from './films/films.component';
 
 @NgModule({
-  declarations: [SimpleFilmsComponent],
+  declarations: [SimpleFilmsComponent, FilmsComponent],
   imports: [
     CommonModule,
     HttpClientModule,

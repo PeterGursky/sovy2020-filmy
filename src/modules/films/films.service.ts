@@ -13,12 +13,26 @@ export class FilmsService {
   constructor(private http: HttpClient, private snackbarServise: SnackbarService,
               private store: Store) { }
   
+  get token() {
+    return this.store.selectSnapshot(state => state.auth.token);
+  }
+
+  get tokenHeader() {
+    return this.token ? { headers: {'X-Auth-Token': this.token}}: undefined;
+  }
+
   getSimpleFilms(): Observable<FilmsResponse> {
     return this.http.get<FilmsResponse>(this.serverUrl).pipe(
       catchError(error => this.processHttpError(error))
     );
   }
 
+  getFilms(indexFrom?: number, indexTo?: number, search?: string): Observable<FilmsResponse> {
+    return this.http.get<FilmsResponse>(this.serverUrl, this.tokenHeader).pipe(
+      catchError(error => this.processHttpError(error))
+    );
+  }
+  
   processHttpError(error) {
     if (error instanceof HttpErrorResponse) {
       if (error.status === 0) {

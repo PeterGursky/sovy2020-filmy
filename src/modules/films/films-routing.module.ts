@@ -5,8 +5,8 @@ import { FilmsComponent } from './films/films.component';
 import { SimpleFilmsComponent } from './simple-films/simple-films.component';
 
 const routes: Routes = [
-  { path: '', component: SimpleFilmsComponent},
-  { path: 'list', component: FilmsComponent}
+  { path: '', component: FilmsComponent},
+  { path: 'list', component: SimpleFilmsComponent}
 ];
 
 @NgModule({

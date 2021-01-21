@@ -30,9 +30,9 @@ export class FilmsService {
     );
   }
 
-  getFilms(indexFrom?: number, indexTo?: number, search?: string): Observable<FilmsResponse> {
+  getFilms(indexFrom?: number, indexTo?: number, search?: string, orderBy?: string, descending?:boolean): Observable<FilmsResponse> {
     let httpOptions = this.tokenHeader;
-    if (indexFrom || indexTo || search) {
+    if (indexFrom || indexTo || search || orderBy || descending) {
       httpOptions = { ... (httpOptions || {}), params: new HttpParams()};
       if (indexFrom) {
         httpOptions.params = httpOptions.params.set('indexFrom', indexFrom.toString());
@@ -42,6 +42,12 @@ export class FilmsService {
       }
       if (search) {
         httpOptions.params = httpOptions.params.set('search', search);
+      }
+      if (orderBy) {
+        httpOptions.params = httpOptions.params.set('orderBy', orderBy);
+      }
+      if (descending) {
+        httpOptions.params = httpOptions.params.set('descending', ''+ descending);
       }
     }
     return this.http.get<FilmsResponse>(this.serverUrl, httpOptions).pipe(

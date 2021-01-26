@@ -6,9 +6,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from '../material.module';
 import { FilmsService } from './films.service';
 import { FilmsComponent } from './films/films.component';
+import { OsobyToStringPipe } from 'src/pipes/osoby-to-string.pipe';
 
 @NgModule({
-  declarations: [SimpleFilmsComponent, FilmsComponent],
+  declarations: [SimpleFilmsComponent, FilmsComponent, OsobyToStringPipe],
   imports: [
     CommonModule,
     HttpClientModule,

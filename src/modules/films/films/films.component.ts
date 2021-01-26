@@ -29,6 +29,7 @@ export class FilmsComponent implements AfterViewInit {
   dataSource: FilmsDataSource;
   expandedFilm: Film | null;
   filter$ = new EventEmitter<string>();
+  loggedIn = false;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -38,8 +39,10 @@ export class FilmsComponent implements AfterViewInit {
     this.dataSource = new FilmsDataSource(filmsService);
     this.userName$.subscribe(userName => {
       if(userName) {
+        this.loggedIn = true;
         this.displayedColumns = ['id', 'nazov', 'slovenskyNazov', 'rok', 'afi1998', 'afi2007'];
       } else {
+        this.loggedIn = false;
         this.displayedColumns = ['id', 'nazov', 'rok'];
       }
     })

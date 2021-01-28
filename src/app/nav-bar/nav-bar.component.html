@@ -15,6 +15,11 @@
       <mat-icon>movie</mat-icon> Films
     </button>
   </span>
+  <span>
+    <button mat-flat-button color="primary" aria-label="Chat" routerLink="/chat">
+      Chat
+    </button>
+  </span>
   <span class="spacer"></span>
   <span *ngIf="username$ | async; then thenBlock else elseBlock"></span>
     <ng-template #thenBlock>

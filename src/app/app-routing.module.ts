@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { ChatComponent } from './chat/chat.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 
@@ -22,6 +23,7 @@ const routes: Routes = [
     loadChildren:() => 
       import('../modules/films/films.module').then(mod => mod.FilmsModule)
   },
+  { path: 'chat', component: ChatComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
   { path: '**', redirectTo: 'login' }

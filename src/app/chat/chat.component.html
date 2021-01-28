@@ -1,0 +1,8 @@
+<form (ngSubmit)="connect()">
+  <mat-form-field appearance="fill">
+    <mat-label>Enter your name</mat-label>
+    <input matInput placeholder="your name" required [(ngModel)]="name" name="myName">
+  </mat-form-field>
+  <button type="submit" mat-stroked-button color="primary">Connect</button>
+  <button type="button" mat-stroked-button color="primary">Disconnect</button>
+</form>

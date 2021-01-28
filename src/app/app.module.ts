@@ -17,6 +17,7 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { RegisterComponent } from './register/register.component';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import { ChatComponent } from './chat/chat.component';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
     LoginComponent,
     NavBarComponent,
     RegisterComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    ChatComponent
   ],
   imports: [
     NgxsModule.forRoot([AuthState], {

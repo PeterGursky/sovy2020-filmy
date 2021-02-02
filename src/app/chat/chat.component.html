@@ -1,8 +1,38 @@
 <form (ngSubmit)="connect()">
   <mat-form-field appearance="fill">
     <mat-label>Enter your name</mat-label>
-    <input matInput placeholder="your name" required [(ngModel)]="name" name="myName">
+    <input matInput placeholder="your name" required [(ngModel)]="name" name="myName" 
+      #nameModel="ngModel" [disabled]="connected">
   </mat-form-field>
-  <button type="submit" mat-stroked-button color="primary">Connect</button>
-  <button type="button" mat-stroked-button color="primary">Disconnect</button>
+  <button type="submit" mat-stroked-button color="primary" 
+      [disabled]="connected || nameModel.invalid">
+    Connect
+  </button>
+  <button type="button" mat-stroked-button color="primary" (click)="disconnect()" [disabled]="!connected">
+    Disconnect
+  </button>
 </form>
+<div *ngIf="connected">
+  <form (ngSubmit)="sendMessage()">
+    <mat-form-field appearance="fill">
+      <mat-label>Enter your message</mat-label>
+      <input matInput placeholder="your message" required [(ngModel)]="message" 
+        name="myMessage" #msgModel="ngModel" #messageField>
+    </mat-form-field>
+    <button type="submit" mat-stroked-button color="primary" [disabled]="msgModel.invalid">Send message</button>
+  </form>
+  <table mat-table [dataSource]="messages" class="mat-elevation-z8">
+    <ng-container matColumnDef="sender">
+      <th mat-header-cell *matHeaderCellDef> Sender </th>
+      <td mat-cell *matCellDef="let row"> {{row.sender}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="message">
+      <th mat-header-cell *matHeaderCellDef> Message </th>
+      <td mat-cell *matCellDef="let row"> {{row.message}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="['sender', 'message']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['sender', 'message'];"></tr>
+  </table>
+</div>

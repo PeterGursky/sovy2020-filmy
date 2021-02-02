@@ -41,11 +41,28 @@ export class ChatService {
     });
   }
 
+  listenMessages(): Observable<ServerMessage> {
+    return new Observable(subscriber => {
+      this.stompClient.subscribe('/topic/messages', message => {
+        subscriber.next(JSON.parse(message.body));
+      });
+    });
+  }
+
   sendName(name:string) {
     this.stompClient.send("/app/hello", {}, JSON.stringify({name}));
   }
-
+  
+  sendMessage(msg:ServerMessage) {
+    this.stompClient.send("/app/message", {}, JSON.stringify(msg));
+  }
+  
   disconnect() {
     this.socket.close();
   }
+}
+
+export interface ServerMessage {
+  name: string;
+  message: string;
 }
